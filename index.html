@@ -1,11 +1,85 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta charset="utf-8">
     <title></title>
   </head>
   <body>
+    <div id='index' class="container">
+      <div class="row">
+        <div class="col-12">
+          <form>
+          <div id="forms" class="row"></div>
+            </form>
+          </div>
+        </div>
+      </div>
 
+    <script type="text/javascript">
+
+    const mainDiv = document.querySelector('#forms');
+
+    function createForm(id, options) {
+      let formGroup = document.createElement('div');
+      formGroup.setAttribute('id', id);
+      inputs = options.inputs
+      for (let key in inputs) {
+        let label = document.createElement('label')
+        let input = document.createElement('input')
+        label.innerHTML = inputs[key].label
+        input.setAttribute('type', inputs[key].type)
+        input.setAttribute('id', inputs[key])
+        label.setAttribute('for', inputs[key])
+
+        const inputGrooup = document.createElement('div')
+        inputGrooup.setAttribute('class', 'input-group mb-3')
+        inputGrooup.appendChild(label)
+        inputGrooup.appendChild(input)
+        formGroup.appendChild(inputGrooup)
+      }
+      btn = document.createElement('input')
+      btn.setAttribute('type', 'submit')
+      btn.setAttribute('value', 'submit')
+      formGroup.appendChild(btn)
+      let btnValue = id == 'reg' ? "Зарегистрироваться" : "Войти"
+      btn.setAttribute('value', btnValue)
+      mainDiv.appendChild(formGroup);
+    }
+
+
+    const regiiserObj = {
+      "id" : 'reg',
+      "inputs" : {
+        "name" : {
+          "label" : "ФИО",
+          "type" : "text"
+        },
+        "email" : {
+          "label" : "Эмейл",
+          "type" : "email"
+        },
+        "password" : {
+          "label": "Пароль",
+          "type": "password"
+        },
+        "isTeacher" : {
+          "label" : "Я учитель",
+          "type" : "checkbox"
+        }
+      },
+      "btnClass" : "btn btn-info"
+    }
+    createForm('reg', regiiserObj)
+
+    // for (let btn of btns) {
+    //   btn.addEventListener('click', function(e) {
+    //     ipcRenderer.send('indexBtnClicked', btn.id)
+    //   });
+    // }
+    // ipcRenderer.on('formGen', function(){
+    //   console.log('Всё хуево')
+    // })
+    </script>
   </body>
 </html>

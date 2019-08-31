@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain, webContents  } = require('electron')
 
 function createWindow () {
   // Создаем окно браузера.
@@ -9,9 +9,12 @@ function createWindow () {
       nodeIntegration: true
     }
   })
-
   // and load the index.html of the app.
   win.loadFile('index.html')
+
 }
+
+
+
 
 app.on('ready', createWindow)
