@@ -1,47 +1,108 @@
-formGroupLogin = document.getElementById('login')
-formGroupReg = document.querySelector('#reg')
-loginBtn = document.querySelector('#loginBtn')
-regBtn = document.querySelector('#regBtn')
+const axios = require('axios');
+const host = "https://mazation96.pythonanywhere.com/"
 
-const url = 'localhost:5000'
+const regBtn = document.getElementById("regBtn");
+const loginBtn = document.getElementById("loginBtn");
 
-// formGroupReg.onsubmit = async(e) => {
-//   e.preventDefault();
-//   var object = {};
-//   var formData = new FormData(document.forms.reg);
+class User {
+  constructor(email, password) {
+    this.email = email;
+    this.password = password;
+  }
+}
 
-//   formData.forEach(function(value, key){
-//       object[key] = value;
-//   });
-//   var json = JSON.stringify(object);
+let user = new User()
 
-//   var xhr = new XMLHttpRequest();
-//   xhr.open("POST", 'localhost:5000/users', true)
-//   xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+regBtn.addEventListener("click", function(e) { 
+  e.preventDefault();
+  const form = new FormData(document.forms.reg)
+  let object = {};
+  let isTeacher = document.getElementById("isTeacher_reg")
+  form.forEach(function(value, key) {
+    object[key] = value;
+});
+  if (isTeacher.checked) {
+    object["isTeacher"] = 1;
+  } else {
+    object["isTeacher"] = 0;
+  }
+  var json = JSON.stringify(object);
+  const email = form.get("email");
+  const password = form.get("password");
+  const url = host + 'api/users'
+  axios ({
+      url: url,
+      method: 'post',
+      headers: {"Content-Type": "application/json"},
+      data: json,
+    })
+  .then(function(response) {
+    if (response.status == 200) {
+      user.email = email
+      user.password = password
+      url_test = host + 'api/tests'
+      axios({
+        url: url_test,
+        method: "get",
+        auth: {
+          username: email,
+          password: password
+        }
+      })
+      .then(function(response) {
+          alert("You were registered successfully!")
+          console.log(response)
+          document.location.href = "tests.html"
+      })
+    } else {
+      alert("Something gone wrong!")
+    }
+  })
+})
 
-//   // Отсылаем объект в формате JSON и с Content-Type application/json
-//   xhr.send(json);
-// }
-
-// formGroupLogin.onsubmit = async(e) => {
-//   e.preventDefault()
-//   console.log("HELLO")
-//   const formData = new FormData(document.forms.reg)
-//   const authString = formData.email + ":" + formData.password
-//   var xhr = new XMLHttpRequest();
-//   xhr.open("GET", "localhost:5000/dashboard", true)
-//   xhr.setRequestHeader("Authorization", "Basic" + btoa(authString))
-// }
-formGroupLogin.addEventListener("submit", function(e){
+loginBtn.addEventListener("click", function(e){
   e.preventDefault()
-  console.log("HELOOOOOOOOOOOO")
+  const form = new FormData(document.forms.login)
+  const email = form.get("email")
+  const password = form.get("password")
+  const url = host + 'api/tests'
+
+  let response = axios ({
+    url: url,
+    method: "get",
+    auth: {
+      username: email,
+      password: password
+    }
+  })
+  .then(function(response) {
+    user.email = email
+    user.password = password
+    document.location.href = "test.html"
+    drawTests(response.data);
+  })
+  .catch(function(error){
+    alert("Неверный логин и пароль")
+  }) 
 })
 
-btn = document.getElementById("loginBtn")
-btn.addEventListener("click", function(e){
-  e.preventDefault;
-  console.log("HELOOOOOOOOOOOO")
-})
-console.log(document.forms)
+function logout() {
+  delete user;
+}
 
+let testsDiv = document.getElementById('tests');
+function drawTests(data) {
+  let test = document.createElement('div');
+  const testsArr = data.tests;
+  testsArr.forEach(function(test) {
+    let title = document.createElement('a');
+    title.setAttribute("id", "testId-" + test.id)
+    title.setAttribute("href", "test.html")
+    title.innerHTML(data.title);
+    
+    titleDiv = document.createElement("div");
+    titleDiv.apendChild(title);
+    testsDiv.appendChild(titleDiv);
+  })
 
+}
