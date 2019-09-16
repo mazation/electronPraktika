@@ -12,12 +12,20 @@ function createForm(id, options) {
   formGroup.appendChild(title)
   inputs = options.inputs
   for (let key in inputs) {
+    
     let label = document.createElement('label')
     let input = document.createElement('input')
     label.innerHTML = inputs[key].label
     input.setAttribute('type', inputs[key].type)
     input.setAttribute('id', key +"_"+ id)
-    input.setAttribute('class', 'form-control')
+    if (inputs[key].type == 'checkbox') {
+      input.setAttribute('class', 'form-check-input');
+      label.setAttribute('class', 'form-check-label')
+      
+    } else {
+      input.setAttribute('class', 'form-control');
+      label.setAttribute('class', 'col-form-label')
+    }
     input.setAttribute('name', key)
     label.setAttribute('for', key)
     label.setAttribute('class', 'col-form-label')
