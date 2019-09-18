@@ -29,21 +29,21 @@ function ready(){
   })
 
   let testsDiv = document.getElementById('tests');
-  function drawTests(data) {
-    let test = document.createElement('div');
-    const testsArr = data.tests;
-    testsArr.forEach(function(test) {
-      let title = document.createElement('a');
-      title.setAttribute("id", "testId-" + test.id)
-      title.setAttribute("href", "test.html")
-      title.innerHTML(data.title);
+  // function drawTests(data) {
+  //   let test = document.createElement('div');
+  //   const testsArr = data.tests;
+  //   testsArr.forEach(function(test) {
+  //     let title = document.createElement('a');
+  //     title.setAttribute("id", "testId-" + test.id)
+  //     title.setAttribute("href", "test.html")
+  //     title.innerHTML(data.title);
       
-      titleDiv = document.createElement("div");
-      titleDiv.apendChild(title);
-      testsDiv.appendChild(titleDiv);
-    })
+  //     titleDiv = document.createElement("div");
+  //     titleDiv.apendChild(title);
+  //     testsDiv.appendChild(titleDiv);
+  //   })
 
-  }
+  // }
 
   function register(form) {
     let object = {};
@@ -68,7 +68,7 @@ function ready(){
         url: url,
         method: 'post',
         headers: {"Content-Type": "application/json"},
-        data: json,
+        data: json
       })
     .then(function(response) {
       if (response.status == 200) {
@@ -85,7 +85,6 @@ function ready(){
         })
         .then(function(response) {
             alert("Вы были успешно зарегистрированы!")
-            console.log(response)
             document.location.href = "tests.html"
         })
       } else {
@@ -111,7 +110,7 @@ function ready(){
       sessionStorage.setItem('email', email)
       sessionStorage.setItem('password', password)
       document.location.href = "tests.html"
-      drawTests(response.data);
+      // drawTests(response.data);
     })
     .catch(function(error){
       alert("Неверный логин и пароль")

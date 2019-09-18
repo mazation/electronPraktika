@@ -2,7 +2,7 @@ function ready() {
     const axios = require('axios');
 const host = "https://mazation96.pythonanywhere.com/"
 
-const form = document.forms.addTestForml;
+const form = new FormData(document.forms.addTestForm);
 const btn = document.getElementById("sendTest");
 console.log(sessionStorage.getItem("email"))
 
@@ -15,13 +15,13 @@ btn.addEventListener('click', function(e) {
     const json = JSON.stringify(object);
     
 
-    const url = host + '/api/addTest';
+    const url = host + '/api/tests/create';
     axios({
         url: url,
         method: 'post',
         headers: {"Content-Type": "application/json"},
         data: json,
-    }).then(function(response){
+    }).then(function(response) {
         if (response == '200') {
             alert('Тест был успешно загружен!');
             document.location.href = "tests.html"

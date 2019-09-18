@@ -1,4 +1,5 @@
-const mainDiv = document.querySelector('#forms');
+function ready() {
+  const mainDiv = document.querySelector('#forms');
 
 function createForm(id, options) {
   let formGroup = document.createElement('div');
@@ -88,5 +89,6 @@ const loginObj = {
 };
 createForm('reg', regiiserObj)
 createForm('login', loginObj)
+}
 
-
+document.addEventListener("DOMContentLoaded", ready);
