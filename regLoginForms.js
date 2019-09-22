@@ -1,9 +1,10 @@
-function ready(){
+function ready() {
   const axios = require('axios');
-  const host = "https://mazation96.pythonanywhere.com/"
+  const host = "http://localhost:5000/"
 
   const regBtn = document.getElementById("regBtn");
   const loginBtn = document.getElementById("loginBtn");
+  let loading = document.getElementById("loading");
 
   regBtn.addEventListener("click", function(e) { 
     e.preventDefault();
@@ -28,23 +29,6 @@ function ready(){
     }
   })
 
-  let testsDiv = document.getElementById('tests');
-  // function drawTests(data) {
-  //   let test = document.createElement('div');
-  //   const testsArr = data.tests;
-  //   testsArr.forEach(function(test) {
-  //     let title = document.createElement('a');
-  //     title.setAttribute("id", "testId-" + test.id)
-  //     title.setAttribute("href", "test.html")
-  //     title.innerHTML(data.title);
-      
-  //     titleDiv = document.createElement("div");
-  //     titleDiv.apendChild(title);
-  //     testsDiv.appendChild(titleDiv);
-  //   })
-
-  // }
-
   function register(form) {
     let object = {};
     let isTeacher = document.getElementById("isTeacher_reg")
@@ -54,6 +38,7 @@ function ready(){
 
     if (isTeacher.checked) {
       object["isTeacher"] = 1;
+      sessionStorage.setItem("isTeacher", true);
     } else {
       object["isTeacher"] = 0;
     }
@@ -72,9 +57,9 @@ function ready(){
       })
     .then(function(response) {
       if (response.status == 200) {
-        sessionStorage.setItem('email', email)
-        sessionStorage.setItem('password', password)
-        url_test = host + 'api/tests'
+        sessionStorage.setItem('email', email);
+        sessionStorage.setItem('password', password);
+        url_test = host + 'api/tests';
         axios({
           url: url_test,
           method: "get",
@@ -94,9 +79,10 @@ function ready(){
   }
 
   function login(form) {
-    const email = form.get("email")
-    const password = form.get("password")
-    const url = host + 'api/tests'
+    const email = form.get("email");
+    const password = form.get("password");
+    const url = host + 'api/tests';
+    loading.removeAttribute('style');
 
     axios ({
       url: url,
@@ -107,10 +93,10 @@ function ready(){
       }
     })
     .then(function(response) {
-      sessionStorage.setItem('email', email)
-      sessionStorage.setItem('password', password)
+      sessionStorage.setItem("email", email)
+      sessionStorage.setItem("password", password)
+      sessionStorage.setItem("isTeacher", response.data.isTeacher)
       document.location.href = "tests.html"
-      // drawTests(response.data);
     })
     .catch(function(error){
       alert("Неверный логин и пароль")

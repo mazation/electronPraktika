@@ -1,0 +1,32 @@
+.box {
+    display: inline-block; 
+    padding: 10px; 
+    height: 20px; 
+    width: 20px; 
+    margin-right: 10px;
+    text-align: center;
+}
+
+.idle-box {
+    color: #000000;
+    background-color: #CCCCCC;
+    border: 2px solid #000000;
+}
+
+.active-box {
+    color: #ffffff;
+    background-color: #009999;
+    border: 2px solid #000000;
+}
+
+.righ-answer {
+    color: #ffffff;
+    background-color: #66CC66;
+    border: 2px solid #000000;
+}
+
+.wrong-answer {
+    color: #ffffff;
+    background-color: #FF3333;
+    border: 2px solid #000000;
+}
