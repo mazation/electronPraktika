@@ -19,7 +19,7 @@ const data = {
             "isRight": false
           }
         ],
-        "img": "https://marshmallow.readthedocs.io/en/stable/api_reference.html#module-marshmallow.fields",
+        "img": "https://cdn.pixabay.com/photo/2019/08/16/15/03/water-lily-4410471_960_720.jpg",
         "question": "Вопрос1"
       },
       {
@@ -46,18 +46,17 @@ const data = {
       }
     ]
   }
-
+let answered = [];
+let right = 0;
 function ready() {
-  const vue = new Vue();
     // const axios = require('axios');
     // const host = "http://localhost:5000/"
-    
     let boxesDiv = document.getElementById("boxes");
     let currentQuest = 0;
     for (let i=0; i < data.questions.length; i++) {
         let box = document.createElement('div');
         let num = document.createElement('span');
-        num.innerHTML = i;
+        num.innerHTML = i + 1;
         num.setAttribute('style', '');
         box.appendChild(num);
         box.setAttribute('id', 'quest' + i);
@@ -66,9 +65,11 @@ function ready() {
         boxesDiv.appendChild(box);   
     }
     setCurrentQuestion(document.getElementById('quest' + currentQuest))
+    answersForm = document.forms[0];
 }
 
 function setCurrentQuestion(el) {
+    changeColorOfPrev();
     currentQuest = el.id.substring(5);
     el.removeAttribute('class');
     el.setAttribute('class', 'box active-box');
@@ -76,13 +77,49 @@ function setCurrentQuestion(el) {
     loadQuestion(currentQuest);
 }
 
-function clearWindow() {
-    let questDiv = document.getElementById
-    
-
+function setRight() {
+  clearWindow();
+  div = document.getElementById('question');
+  span = document.createElement('span');
+  span.setAttribute('id', 'rightAnswer');
+  span.innerHTML = 'Вы уже ответили правильно!';
+  div.appendChild(span);
 }
+
+function setWrong() {
+  clearWindow();
+  div = document.getElementById('question');
+  span = document.createElement('span');
+  span.setAttribute('id', 'wrongAnswer');
+  span.innerHTML = 'Вы уже ответили неправильно!'
+  div.appendChild(span);
+}
+
+function changeColorOfPrev() {
+  prev = document.getElementsByClassName("active-box")[0] ? document.getElementsByClassName("active-box")[0] : null;
+  if (prev) {
+    prev.removeAttribute('class');
+    prev.setAttribute('class', 'box idle-box');
+  }
+}
+
+
+function clearWindow() {
+    rightSpan = document.getElementById('rightAnswer');
+    wrongSpan = document.getElementById('wrongAnswer');
+    rightSpan ? rightSpan.remove() : null;
+    wrongSpan ? wrongSpan.remove() : null;
+    divToRemove1 = document.getElementById("questText");
+    divToRemove2 = document.getElementById("imgDiv");
+    divToRemove3 = document.forms[0];
+    divToRemove1 ? divToRemove1.remove() : null;
+    divToRemove2 ? divToRemove2.remove() : null;  
+    divToRemove3 ? divToRemove3.remove() : null;  
+}
+
 function loadQuestion(num) {
-    console.log(num)
+    const qData = data.questions[num];
+    //Создаем элемент с текстом вопроса
     let questDiv = document.getElementById("question");
     let text = document.createElement("div");
     text.setAttribute('id', 'questText');
@@ -90,10 +127,91 @@ function loadQuestion(num) {
     let h = document.createElement('h2');
     h.setAttribute('id', 'questH');
     quest.setAttribute('id', 'question')
-    h.innerHTML = "Вопрос №" + (num + 1);
-    quest.innerHTML = data.questions[num].question;
+    h.innerHTML = "Вопрос №" + (parseInt(num) + 1);
+    quest.innerHTML = qData.question;
     text.appendChild(h);
     text.appendChild(quest);
+
+    //Создаем элемент с картинкой, если она есть
+    let imgDiv = document.createElement('div');
+    imgDiv.setAttribute('id', 'imgDiv');
+    if (qData.img) {
+      let img = document.createElement('img');
+      img.setAttribute('src', qData.img);
+      img.setAttribute('width', '500');
+      img.setAttribute('height', '300');
+      imgDiv.appendChild(img);
+    }
+
+    //Добавляем ответы
+    let ans = [];
+    let form = document.createElement('form');
+    form.setAttribute('id', 'answersForm');
+    form.setAttribute('name', 'answers');
+    for(let i=0; i<qData.answers.length; i++) {
+      answer = qData.answers[i];
+      let input = document.createElement('input');
+      let label = document.createElement('label');
+      input.setAttribute('type', 'radio');
+      input.setAttribute('name', 'answer');
+      input.setAttribute('value', i);
+      input.setAttribute('id', 'choice' + i)
+      label.setAttribute('for', 'choice' + i);
+      label.innerHTML = answer.answer;
+      form.appendChild(input);
+      form.appendChild(label);
+    }
+    let submit = document.createElement('input');
+    submit.setAttribute('type', 'submit');
+    submit.setAttribute('value', 'Ответить');
+    form.appendChild(submit);
+
+    
     questDiv.appendChild(text);
+    questDiv.appendChild(imgDiv);
+    questDiv.appendChild(form);
+    submit.addEventListener('click', checkAsnwers)
 }
+
+function checkAsnwers(e) {
+  e.preventDefault();
+  answered.push(currentQuest);
+  const formCheck = document.forms[0];
+  answers = data.questions[currentQuest].answers
+  chosenAnswer = document.querySelector('input[name="answer"]:checked').value;
+  if (answers[chosenAnswer].isRight) {
+    isRight(currentQuest);
+  } else {
+    isWrong(currentQuest);
+  }
+  console.log(document.querySelector('input[name="answer"]:checked').value);
+  console.log(currentQuest);
+  event.target.remove()
+}
+
+function isRight(q) {
+  box = document.getElementById('quest' + q);
+  box.removeAttribute('class');
+  box.setAttribute('class', 'box right-answer');
+  box.removeAttribute('oncklick');
+  box.setAttribute('onclick', 'setRight()');
+  right++;
+  quest = document.getElementById('question');
+  message = document.createElement('span');
+  message.innerHTML = 'Вы ответили правильно!';
+  quest.appendChild(message);
+}
+
+function isWrong(q) {
+  box = document.getElementById('quest' + q);
+  box.removeAttribute('class');
+  box.setAttribute('class', 'box wrong-answer');
+  box.removeAttribute('oncklick');
+  box.setAttribute('onclick', 'setWrong()');
+  quest = document.getElementById('question');
+  message = document.createElement('span');
+  message.innerHTML = 'Вы ответили неправильно!';
+  quest.appendChild(message);
+}
+
 document.addEventListener('DOMContentLoaded', ready);
