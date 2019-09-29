@@ -40,6 +40,11 @@ function drawTest(data) {
       box.setAttribute('onclick', 'setCurrentQuestion(this)')
       boxesDiv.appendChild(box);   
     }
+    if (data.maxTime) {
+      timer(data.maxTime);
+    } else {
+      document.getElementById('timer').setAttribute('style', 'display: none;')
+    }
     setCurrentQuestion(document.getElementById('quest' + currentQuest))
     answersForm = document.forms[0];
 }
@@ -220,5 +225,19 @@ function sendTest() {
        alert("Что-то пошло не так");
      });
   }
+
+  function timer(time) {
+    if (time != 0) {
+      let span = document.getElementById("time");
+    span.innerHTML = time;
+    span.innerHTML--
+    setTimeout(timer, 60*1000, parseInt(p.innerHTML));
+    } else {
+      alert("Время вышло!");
+      sendTest();
+    }
+    
+  }
+
 
 document.addEventListener('DOMContentLoaded', ready);
