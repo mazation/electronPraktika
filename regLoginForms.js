@@ -1,6 +1,6 @@
 function ready() {
   const axios = require('axios');
-  const host = "http://localhost:5000/"
+  const host = "http://localhost:5000"
 
   const regBtn = document.getElementById("regBtn");
   const loginBtn = document.getElementById("loginBtn");
@@ -47,7 +47,7 @@ function ready() {
 
     const email = form.get("email");
     const password = form.get("password");
-    const url = host + 'api/users';
+    const url = host + '/api/users';
 
     axios ({
         url: url,
@@ -59,7 +59,7 @@ function ready() {
       if (response.status == 200) {
         sessionStorage.setItem('email', email);
         sessionStorage.setItem('password', password);
-        url_test = host + 'api/tests';
+        url_test = host + '/api/tests';
         axios({
           url: url_test,
           method: "get",
@@ -81,7 +81,7 @@ function ready() {
   function login(form) {
     const email = form.get("email");
     const password = form.get("password");
-    const url = host + 'api/tests';
+    const url = host + '/api/tests';
     loading.removeAttribute('style');
 
     axios ({
@@ -93,10 +93,10 @@ function ready() {
       }
     })
     .then(function(response) {
-      sessionStorage.setItem("email", email)
-      sessionStorage.setItem("password", password)
-      sessionStorage.setItem("isTeacher", response.data.isTeacher)
-      document.location.href = "tests.html"
+      sessionStorage.setItem("email", email);
+      sessionStorage.setItem("password", password);
+      sessionStorage.setItem("isTeacher", response.data.isTeacher);
+      document.location.href = "tests.html";
     })
     .catch(function(error){
       alert("Неверный логин и пароль")

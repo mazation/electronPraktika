@@ -33,12 +33,15 @@ function ready() {
             loading.setAttribute('style', 'display: none;');
         }
     })
+    let teacherDiv = document.getElementById("forTeacher"); 
+    console.log(sessionStorage.getItem("isTeacher"))
+    if (sessionStorage.getItem("isTeacher") != 1) {
+        teacherDiv.setAttribute("style", "display:none;")
+    }
 }
 
 function loadTest(elem) {
     sessionStorage.setItem('testId', elem.id);
 }
-
-
 
 document.addEventListener("DOMContentLoaded", ready);

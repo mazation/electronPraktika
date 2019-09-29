@@ -7,7 +7,20 @@
     <title></title>
   </head>
   <body>
-    <div class="container-fluid">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1>Прохождение теста</h1>
+          <p>Инструкция:</p>
+          <ol>
+            <li>1. Прочитайте вопрос, выберите ответ, нажмите "ответить"</li>
+            <li>2. Чтобы перейти к следующему воспросу, нажмите на его номер</li>
+            <li>3. Когда решите закончить тест, нажмите "Отправить"</li>
+        </ol>
+        </div>
+      </div>
+      <div class="timer">
+      </div>
       <div class="row" id="boxes">
         <div class="col-12">
         </div>
@@ -15,6 +28,11 @@
       <div class="row">
         <div class="col-12" id="question"></dic>
       </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <input type="submit" value="Отправить" onclick="sendTest()">
+        </div>
       </div>
     <script type="text/javascript" src="test.js"></script>
   </body>

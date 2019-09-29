@@ -1,68 +1,44 @@
-const data = {
-    "questions": [
-      {
-        "answers": [
-          {
-            "answer": "Ответ1",
-            "isRight": false
-          },
-          {
-            "answer": "Ответ2",
-            "isRight": true
-          },
-          {
-            "answer": "Ответ3",
-            "isRight": false
-          },
-          {
-            "answer": "Ответ4",
-            "isRight": false
-          }
-        ],
-        "img": "https://cdn.pixabay.com/photo/2019/08/16/15/03/water-lily-4410471_960_720.jpg",
-        "question": "Вопрос1"
-      },
-      {
-        "answers": [
-          {
-            "answer": "Ответ1",
-            "isRight": false
-          },
-          {
-            "answer": "Ответ2",
-            "isRight": false
-          },
-          {
-            "answer": "Ответ3",
-            "isRight": false
-          },
-          {
-            "answer": "Ответ4",
-            "isRight": true
-          }
-        ],
-        "img": "",
-        "question": "Вопрос2"
-      }
-    ]
-  }
 let answered = [];
 let right = 0;
-function ready() {
-    // const axios = require('axios');
-    // const host = "http://localhost:5000/"
-    let boxesDiv = document.getElementById("boxes");
-    let currentQuest = 0;
-    for (let i=0; i < data.questions.length; i++) {
-        let box = document.createElement('div');
-        let num = document.createElement('span');
-        num.innerHTML = i + 1;
-        num.setAttribute('style', '');
-        box.appendChild(num);
-        box.setAttribute('id', 'quest' + i);
-        box.setAttribute('class', 'box idle-box');
-        box.setAttribute('onclick', 'setCurrentQuestion(this)')
-        boxesDiv.appendChild(box);   
+const axios = require('axios');
+const host = "http://localhost:5000";
+url = host + '/api/tests/' + sessionStorage.getItem('testId');
+var data;
+axios({
+  metgod: "get",
+  url: url,
+  auth: {
+    username: sessionStorage.getItem("email"),
+    password: sessionStorage.getItem("password")
+  }
+})
+.then(function(response) {
+  data=response.data
+  drawTest(data);
+})
+.catch(function(error) {
+  console.log(error)
+  alert("Что-то пошло не так");
+  return null;
+}); 
+function ready() { 
+
+}
+
+function drawTest(data) {
+  data = data;
+  let boxesDiv = document.getElementById("boxes");
+  let currentQuest = 0;
+  for (let i=0; i < data.questions.length; i++) {
+      let box = document.createElement('div');
+      let num = document.createElement('span');
+      num.innerHTML = i + 1;
+      num.setAttribute('style', '');
+      box.appendChild(num);
+      box.setAttribute('id', 'quest' + i);
+      box.setAttribute('class', 'box idle-box');
+      box.setAttribute('onclick', 'setCurrentQuestion(this)')
+      boxesDiv.appendChild(box);   
     }
     setCurrentQuestion(document.getElementById('quest' + currentQuest))
     answersForm = document.forms[0];
@@ -109,6 +85,10 @@ function clearWindow() {
     wrongSpan = document.getElementById('wrongAnswer');
     rightSpan ? rightSpan.remove() : null;
     wrongSpan ? wrongSpan.remove() : null;
+    rightMessageSpan = document.getElementById('rightAnswerMessage');
+    wrongMessageSpan = document.getElementById('wrongAnswerMessage');
+    rightMessageSpan ? rightMessageSpan.remove() : null;
+    wrongMessageSpan ? wrongMessageSpan.remove() : null;
     divToRemove1 = document.getElementById("questText");
     divToRemove2 = document.getElementById("imgDiv");
     divToRemove3 = document.forms[0];
@@ -198,6 +178,7 @@ function isRight(q) {
   right++;
   quest = document.getElementById('question');
   message = document.createElement('span');
+  message.setAttribute('id', 'rightAnswerMessage');
   message.innerHTML = 'Вы ответили правильно!';
   quest.appendChild(message);
 }
@@ -210,8 +191,34 @@ function isWrong(q) {
   box.setAttribute('onclick', 'setWrong()');
   quest = document.getElementById('question');
   message = document.createElement('span');
+  message.setAttribute('id', 'wrongAnswerMessage');
   message.innerHTML = 'Вы ответили неправильно!';
   quest.appendChild(message);
 }
+
+function sendTest() {
+    testId = sessionStorage.getItem('testId');
+    sendUrl = host + '/api/results' 
+    axios({
+      method: "post",
+      url: sendUrl,
+      auth: {
+        username: sessionStorage.getItem('email'),
+        password: sessionStorage.getItem('password')
+      },
+      data: {
+        "testId": testId,
+        "score": right
+      }
+    })
+    .then(function(response) {
+      message = "Вы набрали " + right;
+      alert(message);
+      document.location.href = "tests.html";
+     })
+     .catch(function(error) {
+       alert("Что-то пошло не так");
+     });
+  }
 
 document.addEventListener('DOMContentLoaded', ready);
