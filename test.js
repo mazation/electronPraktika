@@ -232,7 +232,7 @@ function sendTest() {
       let span = document.getElementById("time");
     span.innerHTML = time;
     span.innerHTML--
-    setTimeout(timer, 60*1000, parseInt(p.innerHTML));
+    setTimeout(timer, 60*1000, parseInt(span.innerHTML));
     } else {
       alert("Время вышло!");
       sendTest();

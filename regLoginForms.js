@@ -38,9 +38,10 @@ function ready() {
 
     if (isTeacher.checked) {
       object["isTeacher"] = 1;
-      sessionStorage.setItem("isTeacher", true);
+      sessionStorage.setItem("isTeacher", 1);
     } else {
       object["isTeacher"] = 0;
+      sessionStorage.setItem("isTeacher", 0);
     }
 
     const json = JSON.stringify(object);
