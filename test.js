@@ -37,7 +37,7 @@ function drawTest(data) {
       box.appendChild(num);
       box.setAttribute('id', 'quest' + i);
       box.setAttribute('class', 'box idle-box');
-      box.setAttribute('onclick', 'setCurrentQuestion(this)')
+      box.setAttribute('onclick', 'setCurrentQuestion(this)');
       boxesDiv.appendChild(box);   
     }
     if (data.maxTime) {
@@ -145,6 +145,7 @@ function loadQuestion(num) {
       label.innerHTML = answer.answer;
       form.appendChild(input);
       form.appendChild(label);
+      form.appendChild(document.createElement('br'));
     }
     let submit = document.createElement('input');
     submit.setAttribute('type', 'submit');
