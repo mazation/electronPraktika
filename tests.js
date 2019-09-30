@@ -2,6 +2,7 @@ function ready() {
     const host = "http://localhost:5000"
     const axios = require('axios');
 
+
     const url = host + '/api/tests'
     loading = document.getElementById("loading");
     axios({

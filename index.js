@@ -47,8 +47,7 @@ function createForm(id, options) {
   mainDiv.appendChild(formGroup);
 }
 
-
-
+//Объект, по которому строится форма регистрации
 const regiiserObj = {
   "id" : 'reg',
   "title" : "Регистрация",
@@ -73,6 +72,7 @@ const regiiserObj = {
   "btnClass" : "btn btn-info"
 };
 
+//Объект, по которому строится форма входа
 const loginObj = {
   "id" : "login",
   "title" : "Вход",
@@ -91,4 +91,4 @@ createForm('reg', regiiserObj)
 createForm('login', loginObj)
 }
 
-document.addEventListener("DOMContentLoaded", ready);
+document.addEventListener("DOMContentLoaded", ready); //Ожидаем пока дерево DOM загрузится до конца и после этого выполняем код

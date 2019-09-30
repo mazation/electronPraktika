@@ -1,11 +1,12 @@
 function ready() {
-  const axios = require('axios');
-  const host = "http://localhost:5000"
+  const axios = require('axios'); //Создаеём переменную axois, которая позволит использовать функционал модуля axios
+  const host = "http://localhost:5000" //В переменную хоста пишем адрес, где располагается бекенд
 
-  const regBtn = document.getElementById("regBtn");
-  const loginBtn = document.getElementById("loginBtn");
-  let loading = document.getElementById("loading");
+  const regBtn = document.getElementById("regBtn"); //Получаем кнопку отправки формы регистрации
+  const loginBtn = document.getElementById("loginBtn"); //Получаем кнопку отправки формы входа 
+  let loading = document.getElementById("loading"); // Получаем элемент, отображающий загрузку
 
+  //Добавляем обработчик события отправки формы регистрации
   regBtn.addEventListener("click", function(e) { 
     e.preventDefault();
     const form = new FormData(document.forms.reg)
@@ -17,7 +18,7 @@ function ready() {
     }
     
   })
-
+//Добавляем обработчик события отправки формы входа
   loginBtn.addEventListener("click", function(e){
     e.preventDefault()
     const form = new FormData(document.forms.login)
@@ -29,6 +30,7 @@ function ready() {
     }
   })
 
+  //Функция для отправки json на бекенд
   function register(form) {
     let object = {};
     let isTeacher = document.getElementById("isTeacher_reg")
@@ -48,7 +50,7 @@ function ready() {
 
     const email = form.get("email");
     const password = form.get("password");
-    const url = host + '/api/users';
+    const url = host + '/api/users'; // Определяем точный url отравки
 
     axios ({
         url: url,
@@ -57,10 +59,12 @@ function ready() {
         data: json
       })
     .then(function(response) {
+      //При выполнении промиса и статусе ответа 200, записываем данные о пользователе в данные сессии
       if (response.status == 200) {
         sessionStorage.setItem('email', email);
         sessionStorage.setItem('password', password);
         url_test = host + '/api/tests';
+        //Отправляем запрос на получение тестов и в случае выполнения промиса перенаправляем на страницу с тестами
         axios({
           url: url_test,
           method: "get",
@@ -78,7 +82,7 @@ function ready() {
       }
     })
   }
-
+//Добавляем обработчик события отправки формы регистрации
   function login(form) {
     const email = form.get("email");
     const password = form.get("password");
@@ -94,6 +98,7 @@ function ready() {
       }
     })
     .then(function(response) {
+      //При выполнении промиса и статусе ответа 200, записываем данные о пользователе в данные сессии и перенаправляем на страницу с тестами
       sessionStorage.setItem("email", email);
       sessionStorage.setItem("password", password);
       sessionStorage.setItem("isTeacher", response.data.isTeacher);
@@ -104,4 +109,4 @@ function ready() {
     }) 
   }
 }
-document.addEventListener("DOMContentLoaded", ready);
+document.addEventListener("DOMContentLoaded", ready);//Ожидаем пока дерево DOM загрузится до конца и после этого выполняем код
